@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico de Preparo para o Mestrado — Monique Leray</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --wine:#6B1E3C; --wine-mid:#9B4060; --wine-dark:#4A1228;
+  --wine-light:#F5EBF0; --wine-pale:#FDF7FA;
+  --graphite:#1A1A1A; --gray:#6B6B6B; --gray-light:#F4F4F2;
+  --rule:#D4B0BF; --teal:#0F6E56; --teal-light:#EAF6F2;
+  --amber:#E8A020; --amber-light:#FFF8EC;
+  --white:#FFFFFF;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);
+  background:var(--wine-dark);
+  color:var(--graphite);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.5;
+}
+
+/* ── WRAPPER ── */
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;}
+
+/* ── SCREENS ── */
+.screen{display:none;width:100%;max-width:680px;animation:fadeUp .5s ease both;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── INTRO SCREEN ── */
+.intro-card{
+  background:var(--white);
+  border-radius:4px;
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.35);
+}
+.intro-hero{
+  background:var(--wine);
+  padding:56px 48px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.intro-hero::before{
+  content:'';
+  position:absolute;top:0;right:0;bottom:0;
+  width:4px;background:var(--wine-mid);
+}
+.intro-hero::after{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 80% 20%, rgba(155,64,96,.4) 0%, transparent 60%);
+  pointer-events:none;
+}
+.intro-badge{
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--rule);margin-bottom:20px;
+}
+.intro-title{
+  font-family:var(--font-display);
+  font-size:clamp(28px,5vw,42px);font-weight:700;
+  color:var(--white);line-height:1.1;margin-bottom:12px;
+}
+.intro-title em{font-style:italic;color:var(--rule);}
+.intro-sub{font-size:15px;font-weight:300;color:rgba(255,255,255,.65);line-height:1.6;}
+.intro-body{padding:40px 48px;}
+.intro-desc{font-size:15px;color:var(--gray);line-height:1.75;margin-bottom:28px;}
+.intro-points{list-style:none;margin-bottom:36px;}
+.intro-points li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:14px;color:var(--graphite);
+  padding:10px 0;border-bottom:1px solid var(--rule);
+}
+.intro-points li:last-child{border-bottom:none;}
+.intro-points li::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--wine-mid);margin-top:6px;flex-shrink:0;
+}
+.intro-meta{
+  display:flex;gap:24px;margin-bottom:32px;flex-wrap:wrap;
+}
+.meta-item{font-size:12px;color:var(--gray);}
+.meta-item strong{display:block;font-size:15px;color:var(--graphite);font-weight:500;margin-bottom:2px;}
+.btn-start{
+  width:100%;padding:16px;
+  background:var(--wine);color:var(--white);
+  border:none;border-radius:3px;
+  font-family:var(--font-body);font-size:15px;font-weight:500;
+  cursor:pointer;letter-spacing:.3px;
+  transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(107,30,60,.3);
+}
+.btn-start:hover{background:var(--wine-dark);transform:translateY(-2px);box-shadow:0 8px 32px rgba(107,30,60,.4);}
+
+/* ── PROGRESS ── */
+.progress-bar{
+  background:var(--wine-light);
+  border-radius:2px;height:4px;
+  margin-bottom:32px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:var(--wine);
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  border-radius:2px;
+}
+.progress-label{
+  display:flex;justify-content:space-between;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--gray);margin-bottom:8px;
+}
+
+/* ── QUESTION CARD ── */
+.q-card{
+  background:var(--white);
+  border-radius:4px;
+  box-shadow:0 24px 80px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.q-header{
+  background:var(--wine);
+  padding:28px 40px;
+  display:flex;align-items:center;gap:16px;
+}
+.q-num{
+  font-family:var(--font-display);
+  font-size:32px;font-weight:700;
+  color:rgba(255,255,255,.2);line-height:1;min-width:44px;
+}
+.q-category{
+  font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;
+  color:var(--rule);
+}
+.q-body{padding:36px 40px;}
+.q-text{
+  font-family:var(--font-display);
+  font-size:clamp(17px,3vw,21px);font-weight:600;
+  color:var(--graphite);line-height:1.4;margin-bottom:28px;
+}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;
+  border:1.5px solid var(--rule);border-radius:3px;
+  cursor:pointer;transition:all .18s ease;
+  background:var(--white);
+}
+.option:hover{border-color:var(--wine-mid);background:var(--wine-light);}
+.option.selected{
+  border-color:var(--wine);background:var(--wine-light);
+}
+.option-dot{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid var(--rule);flex-shrink:0;
+  transition:all .18s;display:flex;align-items:center;justify-content:center;
+}
+.option.selected .option-dot{
+  border-color:var(--wine);background:var(--wine);
+}
+.option.selected .option-dot::after{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--white);
+}
+.option-text{font-size:14px;color:var(--graphite);font-weight:400;line-height:1.4;}
+.q-footer{
+  padding:24px 40px 32px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--rule);
+}
+.btn-prev{
+  background:none;border:1.5px solid var(--rule);
+  padding:10px 22px;border-radius:3px;
+  font-family:var(--font-body);font-size:13px;color:var(--gray);
+  cursor:pointer;transition:all .18s;
+}
+.btn-prev:hover{border-color:var(--wine-mid);color:var(--wine);}
+.btn-next{
+  background:var(--wine);color:var(--white);
+  border:none;padding:12px 28px;border-radius:3px;
+  font-family:var(--font-body);font-size:14px;font-weight:500;
+  cursor:pointer;transition:all .18s;
+  box-shadow:0 4px 16px rgba(107,30,60,.25);
+  opacity:.4;pointer-events:none;
+}
+.btn-next.enabled{opacity:1;pointer-events:all;}
+.btn-next.enabled:hover{background:var(--wine-dark);transform:translateY(-1px);}
+
+/* ── GATE SCREEN ── */
+.gate-card{
+  background:var(--white);border-radius:4px;
+  box-shadow:0 24px 80px rgba(0,0,0,.35);
+  overflow:hidden;text-align:center;
+}
+.gate-hero{background:var(--wine);padding:48px 40px 36px;position:relative;overflow:hidden;}
+.gate-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 80%, rgba(74,18,40,.6) 0%, transparent 70%);
+}
+.gate-icon{
+  font-size:48px;margin-bottom:16px;position:relative;z-index:1;
+}
+.gate-title{
+  font-family:var(--font-display);
+  font-size:28px;font-weight:700;color:var(--white);
+  line-height:1.2;margin-bottom:10px;position:relative;z-index:1;
+}
+.gate-sub{font-size:14px;color:rgba(255,255,255,.6);position:relative;z-index:1;}
+.gate-body{padding:40px;}
+.gate-desc{
+  font-size:15px;color:var(--gray);line-height:1.75;margin-bottom:32px;
+}
+.gate-desc strong{color:var(--graphite);}
+.btn-instagram{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+  color:var(--white);border:none;border-radius:3px;
+  font-family:var(--font-body);font-size:15px;font-weight:500;
+  cursor:pointer;text-decoration:none;
+  transition:opacity .2s,transform .15s;
+  box-shadow:0 4px 20px rgba(131,58,180,.3);
+  margin-bottom:12px;
+}
+.btn-instagram:hover{opacity:.9;transform:translateY(-1px);}
+.btn-instagram svg{width:20px;height:20px;fill:var(--white);}
+.btn-show-result{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px;
+  background:var(--wine);color:var(--white);
+  border:none;border-radius:3px;
+  font-family:var(--font-body);font-size:14px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 16px rgba(107,30,60,.25);
+}
+.btn-show-result:hover{background:var(--wine-dark);}
+.gate-note{font-size:12px;color:var(--rule);margin-top:16px;}
+
+/* ── RESULT SCREEN ── */
+.result-card{
+  background:var(--white);border-radius:4px;
+  box-shadow:0 24px 80px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.result-hero{padding:48px 48px 36px;position:relative;overflow:hidden;}
+.result-hero.nivel-1{background:var(--wine-dark);}
+.result-hero.nivel-2{background:var(--wine);}
+.result-hero.nivel-3{background:var(--teal);}
+.result-badge-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.result-badge{
+  font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.5);
+}
+.result-nivel{
+  font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 12px;border-radius:2px;
+  background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);
+}
+.result-title{
+  font-family:var(--font-display);
+  font-size:clamp(24px,4vw,36px);font-weight:700;
+  color:var(--white);line-height:1.1;margin-bottom:12px;
+}
+.result-title em{font-style:italic;color:rgba(255,255,255,.6);}
+.result-sub{font-size:14px;font-weight:300;color:rgba(255,255,255,.65);line-height:1.6;max-width:480px;}
+
+/* Score gauge */
+.score-row{
+  display:flex;align-items:center;gap:24px;
+  padding:32px 48px;background:var(--white);
+  border-bottom:1px solid var(--rule);
+}
+.score-circle{
+  position:relative;width:96px;height:96px;flex-shrink:0;
+}
+.score-circle svg{transform:rotate(-90deg);}
+.score-circle-bg{fill:none;stroke:var(--rule);stroke-width:6;}
+.score-circle-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);}
+.score-num{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-value{
+  font-family:var(--font-display);
+  font-size:26px;font-weight:700;color:var(--graphite);line-height:1;
+}
+.score-label{font-size:10px;color:var(--gray);letter-spacing:.5px;}
+.score-text{}
+.score-phrase{
+  font-family:var(--font-display);
+  font-size:18px;font-weight:600;color:var(--graphite);
+  margin-bottom:6px;
+}
+.score-desc{font-size:13px;color:var(--gray);line-height:1.6;}
+
+/* Category breakdown */
+.breakdown{padding:32px 48px;border-bottom:1px solid var(--rule);}
+.breakdown-title{
+  font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;
+  color:var(--wine-mid);margin-bottom:20px;
+}
+.cat-row{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+.cat-label{font-size:13px;color:var(--graphite);width:140px;flex-shrink:0;}
+.cat-bar-wrap{flex:1;height:6px;background:var(--rule);border-radius:3px;overflow:hidden;}
+.cat-bar{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.cat-bar.good{background:var(--teal);}
+.cat-bar.mid{background:var(--amber);}
+.cat-bar.low{background:var(--wine-mid);}
+.cat-pct{font-size:12px;font-weight:500;color:var(--graphite);width:32px;text-align:right;}
+
+/* Tips */
+.tips-section{padding:32px 48px;border-bottom:1px solid var(--rule);}
+.tips-title{
+  font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;
+  color:var(--wine-mid);margin-bottom:20px;
+}
+.tip-item{
+  display:flex;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--rule);
+}
+.tip-item:last-child{border-bottom:none;}
+.tip-icon{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--wine-light);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+}
+.tip-content{}
+.tip-title-text{font-size:14px;font-weight:500;color:var(--graphite);margin-bottom:3px;}
+.tip-desc-text{font-size:13px;color:var(--gray);line-height:1.6;}
+
+/* CTA result */
+.result-cta{padding:32px 48px;background:var(--wine-pale);}
+.result-cta-title{
+  font-family:var(--font-display);
+  font-size:20px;font-weight:600;color:var(--graphite);
+  margin-bottom:8px;
+}
+.result-cta-desc{font-size:14px;color:var(--gray);line-height:1.7;margin-bottom:24px;}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-cta-primary{
+  flex:1;min-width:180px;
+  padding:14px 20px;
+  background:var(--wine);color:var(--white);
+  border:none;border-radius:3px;
+  font-family:var(--font-body);font-size:13px;font-weight:500;
+  cursor:pointer;text-decoration:none;text-align:center;
+  transition:all .2s;box-shadow:0 4px 16px rgba(107,30,60,.25);
+  display:flex;align-items:center;justify-content:center;
+}
+.btn-cta-primary:hover{background:var(--wine-dark);}
+.btn-cta-secondary{
+  flex:1;min-width:180px;
+  padding:14px 20px;
+  background:transparent;color:var(--wine);
+  border:1.5px solid var(--wine);border-radius:3px;
+  font-family:var(--font-body);font-size:13px;font-weight:500;
+  cursor:pointer;text-decoration:none;text-align:center;
+  transition:all .2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.btn-cta-secondary:hover{background:var(--wine-light);}
+.result-footer{
+  padding:20px 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--rule);
+}
+.result-author{font-size:12px;color:var(--gray);}
+.result-author strong{color:var(--graphite);}
+.btn-restart{
+  font-size:12px;color:var(--wine-mid);background:none;border:none;
+  cursor:pointer;text-decoration:underline;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .intro-body,.intro-hero{padding:32px 28px;}
+  .q-header{padding:22px 24px;}
+  .q-body,.q-footer{padding-left:24px;padding-right:24px;}
+  .score-row,.breakdown,.tips-section,.result-cta,.result-footer,.result-hero{padding-left:28px;padding-right:28px;}
+  .score-row{flex-direction:column;text-align:center;gap:16px;}
+  .cta-btns{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ SCREEN: INTRO ══ -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-card">
+    <div class="intro-hero">
+      <div class="intro-badge">Diagnóstico gratuito · Monique Leray</div>
+      <h1 class="intro-title">Você está <em>pronto</em><br>para o processo<br>seletivo?</h1>
+      <p class="intro-sub">Descubra seu nível de preparo para entrar no mestrado em Ciências Humanas e Sociais.</p>
+    </div>
+    <div class="intro-body">
+      <p class="intro-desc">Em menos de 5 minutos você recebe um diagnóstico personalizado com score, análise por categoria e dicas específicas para o que ainda precisa ajustar.</p>
+      <ul class="intro-points">
+        <li>15 perguntas cobrindo todas as etapas do processo seletivo</li>
+        <li>Score calculado automaticamente ao final</li>
+        <li>Dicas personalizadas baseadas nas suas respostas</li>
+        <li>Análise por área: projeto, Lattes, documentos, entrevista, proficiência</li>
+      </ul>
+      <div class="intro-meta">
+        <div class="meta-item"><strong>~5 min</strong>para completar</div>
+        <div class="meta-item"><strong>15</strong>perguntas</div>
+        <div class="meta-item"><strong>3</strong>níveis de resultado</div>
+      </div>
+      <button class="btn-start" onclick="startQuiz()">Começar o diagnóstico →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN: QUIZ ══ -->
+<div class="screen" id="screen-quiz">
+  <div class="progress-label">
+    <span id="progress-text">Pergunta 1 de 15</span>
+    <span id="progress-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="q-card" id="q-card"></div>
+</div>
+
+<!-- ══ SCREEN: GATE ══ -->
+<div class="screen" id="screen-gate">
+  <div class="gate-card">
+    <div class="gate-hero">
+      <div class="gate-icon">🎓</div>
+      <h2 class="gate-title">Seu diagnóstico está pronto!</h2>
+      <p class="gate-sub">Siga @moniqueleray para liberar o resultado completo</p>
+    </div>
+    <div class="gate-body">
+      <p class="gate-desc">Para acessar seu <strong>score, análise por categoria e dicas personalizadas</strong>, siga o perfil @moniqueleray no Instagram. É grátis e leva 10 segundos.</p>
+      <a href="https://instagram.com/moniqueleray" target="_blank" class="btn-instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Seguir @moniqueleray no Instagram
+      </a>
+      <button class="btn-show-result" onclick="showResult()">
+        Já sigo! Ver meu resultado →
+      </button>
+      <p class="gate-note">O resultado é exibido aqui mesmo, imediatamente após clicar em "Já sigo".</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN: RESULT ══ -->
+<div class="screen" id="screen-result"></div>
+
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// PERGUNTAS
+// ══════════════════════════════════════════════════════════════════
+const questions = [
+  // CATEGORIA: PROJETO DE PESQUISA (5 perguntas, 0-2 pts cada = 10 pts)
+  {
+    cat:"Projeto de Pesquisa",
+    text:"Como está o seu projeto de pesquisa para o mestrado?",
+    opts:[
+      {text:"Ainda não comecei a pensar no tema",pts:0},
+      {text:"Tenho uma ideia de tema, mas nada escrito ainda",pts:1},
+      {text:"Tenho um rascunho escrito, mas com dúvidas estruturais",pts:1},
+      {text:"Tenho um projeto com problema, objetivos e metodologia definidos",pts:2},
+    ]
+  },
+  {
+    cat:"Projeto de Pesquisa",
+    text:"Sua questão central de pesquisa começa com 'Como', 'De que forma' ou 'De que maneira'?",
+    opts:[
+      {text:"Ainda não tenho uma questão central formulada",pts:0},
+      {text:"Tenho uma pergunta, mas começa com 'O que é' ou 'Por que'",pts:0},
+      {text:"Tenho uma pergunta, mas não sei se está formulada corretamente",pts:1},
+      {text:"Sim, minha questão central está bem formulada e não pode ser respondida com sim/não",pts:2},
+    ]
+  },
+  {
+    cat:"Projeto de Pesquisa",
+    text:"Há coerência entre o problema de pesquisa, os objetivos e a metodologia do seu projeto?",
+    opts:[
+      {text:"Ainda não escrevi essas seções",pts:0},
+      {text:"Escrevi, mas não sei se estão alinhados entre si",pts:1},
+      {text:"Acredito que estão alinhados, mas nunca fiz uma verificação sistemática",pts:1},
+      {text:"Sim, revisei a coerência interna e todas as seções se conectam",pts:2},
+    ]
+  },
+  {
+    cat:"Projeto de Pesquisa",
+    text:"Você já identificou o orientador de interesse e verificou o alinhamento do seu tema com as pesquisas dele?",
+    opts:[
+      {text:"Não, ainda não sei quem seria o orientador",pts:0},
+      {text:"Tenho um nome em mente, mas não pesquisei o Lattes nem as publicações",pts:1},
+      {text:"Pesquisei o Lattes e as publicações, mas ainda não entrei em contato",pts:1},
+      {text:"Sim, pesquisei e já entrei em contato (ou meu tema está claramente alinhado)",pts:2},
+    ]
+  },
+  {
+    cat:"Projeto de Pesquisa",
+    text:"Seu tema de pesquisa está delimitado com recorte temático, espacial e temporal?",
+    opts:[
+      {text:"Tenho apenas um tema amplo, sem delimitação",pts:0},
+      {text:"Tenho uma ideia de recorte, mas ainda muito vaga",pts:1},
+      {text:"Tenho o recorte temático definido, mas ainda falta o espacial ou temporal",pts:1},
+      {text:"Sim, o tema está delimitado com o quê, onde e quando bem definidos",pts:2},
+    ]
+  },
+
+  // CATEGORIA: LATTES E CURRÍCULO (3 perguntas, 0-2 pts = 6 pts)
+  {
+    cat:"Currículo Lattes",
+    text:"Como está o seu Currículo Lattes?",
+    opts:[
+      {text:"Não tenho Lattes ou está muito desatualizado",pts:0},
+      {text:"Tenho Lattes, mas com informações incompletas ou desatualizadas",pts:1},
+      {text:"Lattes atualizado, mas sem comprovantes organizados",pts:1},
+      {text:"Lattes atualizado, com comprovantes numerados e organizados para entrega",pts:2},
+    ]
+  },
+  {
+    cat:"Currículo Lattes",
+    text:"Você sabe quais itens do seu Lattes são pontuados no processo seletivo do programa de interesse?",
+    opts:[
+      {text:"Não sei como o Lattes é avaliado",pts:0},
+      {text:"Sei que é avaliado, mas não conheço os critérios específicos",pts:1},
+      {text:"Conheço os critérios gerais, mas não li o edital do programa de interesse",pts:1},
+      {text:"Sim, li o edital e sei exatamente quais itens pontuar e os limites",pts:2},
+    ]
+  },
+  {
+    cat:"Currículo Lattes",
+    text:"Você tem atividades acadêmicas pontuáveis para incluir no Lattes (artigos, especializações, experiência docente)?",
+    opts:[
+      {text:"Não tenho nenhum item pontuável",pts:0},
+      {text:"Tenho poucos itens (1-2), sem muita relevância para o processo",pts:1},
+      {text:"Tenho alguns itens relevantes, mas não ao nível máximo pontuável",pts:1},
+      {text:"Tenho itens suficientes para atingir a pontuação máxima no Lattes",pts:2},
+    ]
+  },
+
+  // CATEGORIA: DOCUMENTOS E INSCRIÇÃO (2 perguntas, 0-2 pts = 4 pts)
+  {
+    cat:"Documentos",
+    text:"Como está a organização dos seus documentos para a inscrição?",
+    opts:[
+      {text:"Não comecei a reunir nenhum documento",pts:0},
+      {text:"Tenho alguns documentos, mas não todos que podem ser exigidos",pts:1},
+      {text:"Tenho a maioria, mas preciso verificar o que falta no edital",pts:1},
+      {text:"Todos os documentos digitalizados em PDF e organizados conforme o edital",pts:2},
+    ]
+  },
+  {
+    cat:"Documentos",
+    text:"Você tem o Memorial Descritivo ou a Carta de Intenção preparados?",
+    opts:[
+      {text:"Não sei o que é ou nunca escrevi nenhum dos dois",pts:0},
+      {text:"Sei o que é, mas ainda não escrevi",pts:0},
+      {text:"Tenho um rascunho, mas precisa de ajustes",pts:1},
+      {text:"Sim, está escrito e personalizado para o programa de interesse",pts:2},
+    ]
+  },
+
+  // CATEGORIA: PROFICIÊNCIA (2 perguntas, 0-2 pts = 4 pts)
+  {
+    cat:"Proficiência",
+    text:"Como está sua comprovação de proficiência em língua estrangeira?",
+    opts:[
+      {text:"Não tenho nenhum certificado e ainda não me inscrevi em exame",pts:0},
+      {text:"Já me inscrevi em um exame, mas ainda não realizei",pts:1},
+      {text:"Tenho um certificado, mas preciso verificar se está dentro do prazo de validade",pts:1},
+      {text:"Tenho certificado válido e dentro do prazo exigido pelo edital",pts:2},
+    ]
+  },
+  {
+    cat:"Proficiência",
+    text:"Você sabe qual exame de proficiência é aceito pelo programa de interesse?",
+    opts:[
+      {text:"Não sei quais exames são aceitos",pts:0},
+      {text:"Sei que precisa de proficiência, mas não verifiquei os exames aceitos",pts:1},
+      {text:"Conheço os exames aceitos, mas ainda não escolhi qual fazer",pts:1},
+      {text:"Sim, já escolhi o exame e sei o que precisa para ser aprovado",pts:2},
+    ]
+  },
+
+  // CATEGORIA: ENTREVISTA E PROCESSO (3 perguntas, 0-2 pts = 6 pts)
+  {
+    cat:"Entrevista e Processo",
+    text:"Você sabe como funciona o processo seletivo do programa de interesse (etapas, pesos, datas)?",
+    opts:[
+      {text:"Não sei como funciona o processo seletivo",pts:0},
+      {text:"Tenho uma ideia geral, mas nunca li o edital completo",pts:1},
+      {text:"Li o edital, mas ainda tenho dúvidas sobre algumas etapas",pts:1},
+      {text:"Sim, conheço todas as etapas, pesos e datas do certame",pts:2},
+    ]
+  },
+  {
+    cat:"Entrevista e Processo",
+    text:"Como você se sente em relação à entrevista do processo seletivo?",
+    opts:[
+      {text:"Não sei o que esperar de uma entrevista de mestrado",pts:0},
+      {text:"Sei que existe entrevista, mas nunca me preparei para ela",pts:0},
+      {text:"Já li sobre como funcionam as entrevistas, mas nunca simulei",pts:1},
+      {text:"Já simulei a entrevista e consigo defender meu projeto com segurança",pts:2},
+    ]
+  },
+  {
+    cat:"Entrevista e Processo",
+    text:"Você já foi aluno ouvinte/especial em algum programa de pós-graduação ou tem contato com a dinâmica acadêmica atual?",
+    opts:[
+      {text:"Não, nunca participei de nada relacionado à pós-graduação",pts:0},
+      {text:"Não, mas conheço o programa de interesse pelo site e editais anteriores",pts:1},
+      {text:"Participei de eventos, cursos ou atividades vinculadas ao programa",pts:1},
+      {text:"Sim, já fui aluno ouvinte ou tenho contato regular com o ambiente do programa",pts:2},
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════════════════
+// LÓGICA DE RESULTADOS
+// ══════════════════════════════════════════════════════════════════
+const TOTAL_PTS = 30;
+
+const results = {
+  nivel1: { // 0–39%
+    nivel:"Nível 1",
+    phrase:"Início de jornada",
+    title:"Você está no <em>começo</em><br>da preparação",
+    sub:"Há bastante terreno a cobrir — e o bom de saber disso agora é que há tempo suficiente para chegar pronto.",
+    heroClass:"nivel-1",
+    scoreColor:"#9B4060",
+    desc:"Seu diagnóstico mostra que você ainda está nas fases iniciais da preparação. Não é um problema — é informação. Candidatos que descobrem agora onde estão têm muito mais chance de aprovação do que quem chega no edital sem esse mapa.",
+    tips:[
+      {icon:"📋",title:"Comece pelo programa, não pelo projeto",desc:"Antes de escrever uma linha, pesquise 2 a 3 programas de interesse. Leia o edital anterior, conheça as linhas de pesquisa e identifique o orientador com quem seu tema conversa."},
+      {icon:"🔬",title:"Defina o tema com delimitação",desc:"Um tema amplo como 'Direitos humanos' não é pesquisável em 24 meses. Pergunte-se: qual aspecto específico, em qual instituição, em qual período? A delimitação é o que torna o projeto defensável."},
+      {icon:"📄",title:"Reúna os documentos básicos agora",desc:"Diploma, histórico escolar, comprovantes do Lattes. Digitalizar tudo com antecedência evita correria na semana do edital."},
+      {icon:"🌍",title:"Resolva a proficiência antes do projeto",desc:"O exame de proficiência tem data, custo e prazo de validade. Agende quanto antes — de preferência o TEAP (TESEPRIME), mais simples e acessível para a maioria dos programas."},
+      {icon:"🎓",title:"O Ebook 1 é o seu ponto de partida",desc:"'Do zero ao programa certo' foi escrito para quem está exatamente onde você está. Cobre programa, orientador, aluno ouvinte e antecipação estratégica. Link na bio do @moniqueleray."},
+    ],
+    cta_primary:{text:"Baixar Ebook 1 grátis →",url:"https://drive.google.com/drive/u/0/folders/1vD3h7Aiab8IMEMXh9Hr_GoK0QQhp0AAP"},
+    cta_secondary:{text:"Conhecer o curso completo",url:"https://instagram.com/moniqueleray"},
+  },
+  nivel2: { // 40–69%
+    nivel:"Nível 2",
+    phrase:"Em desenvolvimento",
+    title:"Você tem base —<br>falta <em>afinar</em> os detalhes",
+    sub:"Você está no caminho certo. Os elementos centrais existem, mas precisam de ajuste antes de chegar na seleção.",
+    heroClass:"nivel-2",
+    scoreColor:"#E8A020",
+    desc:"Seu diagnóstico mostra um perfil em construção: você já deu os primeiros passos, mas há lacunas que, se não forem corrigidas, podem custar a aprovação. A boa notícia é que você está no momento certo para ajustar — não muito cedo, não tarde demais.",
+    tips:[
+      {icon:"🔗",title:"Verifique a coerência interna do projeto",desc:"O maior erro neste nível é ter as seções escritas mas desconectadas entre si. Preencha o Quadro de Planejamento da Pesquisa (disponível gratuitamente em @moniqueleray) e verifique se problema, objetivos e metodologia se alinham."},
+      {icon:"👩‍🏫",title:"Entre em contato com o orientador",desc:"Se ainda não fez isso, envie um e-mail objetivo apresentando seu tema e perguntando sobre disponibilidade. Chegar na entrevista com o orientador já tendo referência positiva de você muda a dinâmica."},
+      {icon:"📊",title:"Revise o Lattes com foco no edital",desc:"Não é necessário ter todos os itens — é necessário ter os que o edital pontua. Verifique os critérios específicos do programa de interesse e maximize a pontuação com o que você já tem."},
+      {icon:"🗣️",title:"Simule a entrevista em voz alta",desc:"Você sabe responder 'Fale sobre o seu projeto' em 2 minutos sem consultar nada? Se não, pratique agora. A entrevista é a etapa mais previsível — e a mais subestimada."},
+      {icon:"📚",title:"O Ebook 2 é o recurso certo para você",desc:"'O projeto que aprova' cobre cada seção do projeto com instruções e exemplos. É o material mais estratégico para quem está no Nível 2 e quer chegar ao Nível 3 antes do edital."},
+    ],
+    cta_primary:{text:"Ver o Ebook 2 — O projeto que aprova →",url:"https://instagram.com/moniqueleray"},
+    cta_secondary:{text:"Conhecer a mentoria individual",url:"https://instagram.com/moniqueleray"},
+  },
+  nivel3: { // 70–100%
+    nivel:"Nível 3",
+    phrase:"Bem preparado",
+    title:"Você está <em>pronto</em><br>para o processo seletivo",
+    sub:"Seu diagnóstico indica preparo sólido em todas as frentes. Agora é refinar, revisar e submeter com confiança.",
+    heroClass:"nivel-3",
+    scoreColor:"#0F6E56",
+    desc:"Parabéns — você está entre os candidatos mais bem preparados. Seu diagnóstico mostra que você cobre as principais bases do processo seletivo. A partir daqui, o foco é revisão de qualidade: não escrever mais, mas escrever melhor.",
+    tips:[
+      {icon:"✅",title:"Faça a verificação final de coerência",desc:"Leia o projeto inteiro de uma vez, como se fosse a banca. Verifique se o objetivo geral responde à questão central, se os objetivos específicos cobrem o caminho para o geral e se a metodologia é adequada para o problema."},
+      {icon:"👁️",title:"Peça um olhar externo antes de submeter",desc:"Um par de olhos experiente identifica inconsistências que quem escreveu o texto nunca vê. A revisão de conteúdo da mentoria individual faz exatamente isso — com comentários argumentativos e sugestões de autores."},
+      {icon:"🗣️",title:"Simule a entrevista com alguém",desc:"Não apenas em voz alta sozinho — peça para alguém te entrevistar com as 7 perguntas mais comuns. A banca avalia segurança e coerência, e esses elementos só aparecem sob pressão real."},
+      {icon:"📅",title:"Verifique o cronograma completo",desc:"Anote todas as datas: inscrição, prova escrita (se houver), entrevista e resultado. Coloque no calendário com alertas. Candidatos bem preparados perdem vagas por falta de atenção ao cronograma."},
+      {icon:"🏆",title:"A revisão profissional faz a diferença final",desc:"No Nível 3, o que separa aprovados de reprovados não é o conteúdo — é a apresentação e a coerência. O pacote Mentoria Estratégica (Nível 4) foi feito para você: inclui revisão de conteúdo com comentários detalhados e análise de pontos fortes e fracos."},
+    ],
+    cta_primary:{text:"Conhecer a mentoria individual →",url:"https://instagram.com/moniqueleray"},
+    cta_secondary:{text:"Baixar o guia de revisão final",url:"https://instagram.com/moniqueleray"},
+  }
+};
+
+// ══════════════════════════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════════════════════════
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+
+// ══════════════════════════════════════════════════════════════════
+// FUNÇÕES
+// ══════════════════════════════════════════════════════════════════
+function startQuiz(){
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+  });
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  // re-trigger animation
+  el.style.animation='none';
+  el.offsetHeight;
+  el.style.animation='';
+}
+
+function updateProgress(){
+  const pct = Math.round((current/questions.length)*100);
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-text').textContent = `Pergunta ${current+1} de ${questions.length}`;
+  document.getElementById('progress-pct').textContent = pct+'%';
+}
+
+function renderQuestion(){
+  updateProgress();
+  const q = questions[current];
+  const sel = answers[current];
+  const card = document.getElementById('q-card');
+
+  card.innerHTML = `
+    <div class="q-header">
+      <div class="q-num">${String(current+1).padStart(2,'0')}</div>
+      <div class="q-category">${q.cat}</div>
+    </div>
+    <div class="q-body">
+      <div class="q-text">${q.text}</div>
+      <div class="options">
+        ${q.opts.map((o,i)=>`
+          <div class="option ${sel===i?'selected':''}" onclick="selectOption(${i})">
+            <div class="option-dot"></div>
+            <span class="option-text">${o.text}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="q-footer">
+      <button class="btn-prev" onclick="prevQ()" ${current===0?'style="visibility:hidden"':''}>← Anterior</button>
+      <button class="btn-next ${sel!==null?'enabled':''}" id="btn-next" onclick="nextQ()">
+        ${current===questions.length-1?'Ver resultado →':'Próxima →'}
+      </button>
+    </div>
+  `;
+}
+
+function selectOption(i){
+  answers[current] = i;
+  renderQuestion();
+}
+
+function prevQ(){
+  if(current>0){current--;renderQuestion();}
+}
+
+function nextQ(){
+  if(answers[current]===null)return;
+  if(current<questions.length-1){
+    current++;
+    renderQuestion();
+  } else {
+    showScreen('screen-gate');
+  }
+}
+
+function showResult(){
+  // Calculate score
+  let total = 0;
+  const catScores = {};
+  questions.forEach((q,i)=>{
+    const sel = answers[i];
+    const pts = sel!==null ? q.opts[sel].pts : 0;
+    total += pts;
+    if(!catScores[q.cat]) catScores[q.cat]={pts:0,max:0};
+    catScores[q.cat].pts += pts;
+    catScores[q.cat].max += 2;
+  });
+  const pct = Math.round((total/TOTAL_PTS)*100);
+  const level = pct<=39?'nivel1':pct<=69?'nivel2':'nivel3';
+  const r = results[level];
+
+  // Build result HTML
+  const catBars = Object.entries(catScores).map(([cat,sc])=>{
+    const p = Math.round((sc.pts/sc.max)*100);
+    const cls = p>=70?'good':p>=40?'mid':'low';
+    return `
+      <div class="cat-row">
+        <div class="cat-label">${cat}</div>
+        <div class="cat-bar-wrap"><div class="cat-bar ${cls}" style="width:0%" data-width="${p}%"></div></div>
+        <div class="cat-pct">${p}%</div>
+      </div>
+    `;
+  }).join('');
+
+  const tipsHTML = r.tips.map(t=>`
+    <div class="tip-item">
+      <div class="tip-icon">${t.icon}</div>
+      <div class="tip-content">
+        <div class="tip-title-text">${t.title}</div>
+        <div class="tip-desc-text">${t.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Gauge
+  const radius=38, circ=2*Math.PI*radius;
+  const dash = circ*(1-pct/100);
+
+  document.getElementById('screen-result').innerHTML = `
+    <div class="result-card">
+      <div class="result-hero ${r.heroClass}">
+        <div class="result-badge-row">
+          <span class="result-badge">Diagnóstico de preparo · Monique Leray</span>
+          <span class="result-nivel">${r.nivel}</span>
+        </div>
+        <h2 class="result-title">${r.title}</h2>
+        <p class="result-sub">${r.sub}</p>
+      </div>
+
+      <div class="score-row">
+        <div class="score-circle">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle class="score-circle-bg" cx="48" cy="48" r="${radius}"/>
+            <circle class="score-circle-fill" cx="48" cy="48" r="${radius}"
+              stroke="${r.scoreColor}"
+              stroke-dasharray="${circ}"
+              stroke-dashoffset="${circ}"
+              id="score-arc"/>
+          </svg>
+          <div class="score-num">
+            <span class="score-value" id="score-display">0</span>
+            <span class="score-label">pontos</span>
+          </div>
+        </div>
+        <div class="score-text">
+          <div class="score-phrase">${r.phrase} — ${pct}% de preparo</div>
+          <div class="score-desc">${r.desc}</div>
+        </div>
+      </div>
+
+      <div class="breakdown">
+        <div class="breakdown-title">Análise por área</div>
+        ${catBars}
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-title">O que fazer agora — suas 5 prioridades</div>
+        ${tipsHTML}
+      </div>
+
+      <div class="result-cta">
+        <div class="result-cta-title">Quer ir mais fundo?</div>
+        <div class="result-cta-desc">Monique Leray ajudou dezenas de candidatos a entrar no mestrado em Ciências Humanas e Sociais. Os materiais abaixo foram desenvolvidos especificamente para o seu nível de preparo.</div>
+        <div class="cta-btns">
+          <a href="${r.cta_primary.url}" target="_blank" class="btn-cta-primary">${r.cta_primary.text}</a>
+          <a href="${r.cta_secondary.url}" target="_blank" class="btn-cta-secondary">${r.cta_secondary.text}</a>
+        </div>
+      </div>
+
+      <div class="result-footer">
+        <div class="result-author"><strong>Monique Leray</strong> · Doutoranda em Direito · @moniqueleray</div>
+        <button class="btn-restart" onclick="restartQuiz()">Refazer o teste</button>
+      </div>
+    </div>
+  `;
+
+  showScreen('screen-result');
+
+  // Animate score arc + counter
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{
+      const arc = document.getElementById('score-arc');
+      if(arc) arc.style.strokeDashoffset = dash;
+      animateCounter('score-display', 0, total, 1200);
+      // Animate category bars
+      document.querySelectorAll('.cat-bar').forEach(b=>{
+        setTimeout(()=>{ b.style.width=b.dataset.width; },300);
+      });
+    },100);
+  });
+}
+
+function animateCounter(id, from, to, duration){
+  const el = document.getElementById(id);
+  if(!el)return;
+  const start=performance.now();
+  function update(now){
+    const p=Math.min((now-start)/duration,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(from+(to-from)*ease)+'/'+TOTAL_PTS;
+    if(p<1)requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function restartQuiz(){
+  current=0;
+  answers=new Array(questions.length).fill(null);
+  showScreen('screen-intro');
+}
+
+// Nav scroll effect
+window.addEventListener('scroll',()=>{});
+</script>
+</body>
+</html>
